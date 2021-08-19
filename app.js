@@ -19,12 +19,6 @@ app.post('/delta', async function (req, res, next) {
     return res.status(200).end();
   }
 
-
-  // change the status of the publication task to ongoing
-
-  // return 202 Accepted
-
-  // for every pre
 });
 
 
