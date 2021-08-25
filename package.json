@@ -12,6 +12,9 @@
   "author": "redpencil.io",
   "license": "MIT",
   "dependencies": {
-    "@lblod/mu-auth-sudo": "^0.2.0"
+    "@lblod/mu-auth-sudo": "^0.2.0",
+    "xml": "^1.0.1",
+    "moment": "^2.23.0",
+    "moment-timezone": "^0.5.27"
   }
 }
