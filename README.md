@@ -1,7 +1,7 @@
 # press-releases-belga-publication-service
 
-This microservice looks for publication tasks that have its publication-channel set to ("Belga"), are not
-started yet (adms:status) and it's publication-event has no ebucore:publicationEndDateTime yet.
+This microservice looks for publication tasks that have its publication-channel set to "Belga", are not
+started yet (`adms:status`) and its publication-event has no `ebucore:publicationEndDateTime` yet.
 
 For every result found, it generates an xml file, updates the statuses and dates and puts the xml file on the ftp server of Belga.
 
@@ -14,33 +14,34 @@ services:
   press-releases-belga-publication:
     image: kanselarij/press-releases-belga-publication-service:0.1.0
     volumes:
-      - ./data/files:/share
+      - ./data/belga:/share
     restart: always
     logging: *default-logging
 ```
-The mounted volume `./data/files` is the location where the xml files will be stored.
+The mounted volume `./data/belga` is the location where the xml files will be stored.
 
-Next, make the service listen for new conversion tasks. Assuming a delta-notifier is already available in the stack, add the following rules to the delta-notifier's configuration in `./config/delta/rules`.
+Next, make the service listen for new conversion tasks. Assuming a delta-notifier is already available in the stack, add the following rules to the delta-notifier's configuration in `./config/delta/rules.js`.
 
 ```javascript
 {
     match: {
         predicate: {
             type: 'uri',
-            value: 'http://www.w3.org/ns/adms#status',
+            value: 'http://www.w3.org/ns/adms#status'
         },
         object: {
             type: 'uri',
-            value: 'http://themis.vlaanderen.be/id/concept/publication-task-status/not-started',
+            value: 'http://themis.vlaanderen.be/id/concept/publication-task-status/not-started'
         },
     },
     callback: {
-        url: 'http://press-releases-belga-publication/delta', method: 'POST',
+        url: 'http://press-releases-belga-publication/delta',
+        method: 'POST'
     },
     options: {
         resourceFormat: 'v0.0.1',
         gracePeriod: 250,
-        ignoreFromSelf: true,
+        ignoreFromSelf: true
     },
 }
 ```
@@ -75,12 +76,13 @@ The service will fail if the environment variables are not defined properly.
 ##### Class
 `ext:PublicationTask`
 ##### Properties
-| Name    | Predicate     | Range           | Definition                                                                                                        |
-|---------|---------------|-----------------|-------------------------------------------------------------------------------------------------------------------|
-| status  | `adms:status` | `rdfs:Resource` | Status of the publication task, having value `<http://themis.vlaanderen.be/id/concept/publication-task-status/not-started>` when this service is triggered |
-| created | `dct:created` | `xsd:dateTime`  | Datetime of creation of the task                                                                                  |
-| modified | `dct:modified` | `xsd:dateTime`  | Datetime of the last modification of the task                                                                                  |
-| content  | `nie:htmlContent`  | `string` | The html content generated for the Belga press release                                                           |
+| Name                | Predicate                | Range           | Definition                                                                                                                                                 |
+|---------------------|--------------------------|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| status              | `adms:status`            | `rdfs:Resource` | Status of the publication task, having value `<http://themis.vlaanderen.be/id/concept/publication-task-status/not-started>` when this service is triggered |
+| created             | `dct:created`            | `xsd:dateTime`  | Datetime of creation of the task                                                                                                                           |
+| modified            | `dct:modified`           | `xsd:dateTime`  | Datetime of the last modification of the task                                                                                                              |
+| publication-channel | `ext:publicationChannel` | `rdfs:Resource` | Publication channel related to the task. Only the Belga publication channel (`http://themis.vlaanderen.be/id/publicatiekanaal/04a5d121-c991-493c-b645-b0c67cc53cf6`) is of interest to this service                                              |
+| content             | `nie:htmlContent`        | `string`        | The html content generated for the Belga press release                                                                                                     |
 
 
 #### Publication task statuses
