@@ -80,7 +80,7 @@ The service will fail if the environment variables are not defined properly.
 | status  | `adms:status` | `rdfs:Resource` | Status of the publication task, having value `<http://themis.vlaanderen.be/id/concept/publication-task-status/not-started>` when this service is triggered |
 | created | `dct:created` | `xsd:dateTime`  | Datetime of creation of the task                                                                                  |
 | modified | `dct:modified` | `xsd:dateTime`  | Datetime of the last modification of the task                                                                                  |
-| source  | `nie:htmlContent`  | `rdfs:Resource` | The html content generated for the Belga press release                                                           |
+| content  | `nie:htmlContent`  | `string` | The html content generated for the Belga press release                                                           |
 
 
 #### Publication task statuses
