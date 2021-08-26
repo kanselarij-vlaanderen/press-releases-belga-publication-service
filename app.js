@@ -1,23 +1,23 @@
 import { app, errorHandler } from 'mu';
 import { getNotStartedPublicationTasks, TASK_ONGOING_STATUS } from './lib/publication-task';
 
+const requiredEnvironmentVariables = [
+  'BELGA_FTP_USERNAME',
+  'BELGA_FTP_PASSWORD',
+  'BELGA_FTP_HOST',
+];
+
+requiredEnvironmentVariables.forEach((key) => {
+  if (!process.env[key]) {
+    console.log('---------------------------------------------------------------');
+    console.log(`[ERROR]:Environment variable ${key} must be configured`);
+    console.log('---------------------------------------------------------------');
+    process.exit(1);
+  }
+});
+
 app.post('/delta', async function (req, res, next) {
   console.log("Processing deltas for Belga...");
-
-  const requiredEnvironmentVariables = [
-    'BELGA_FTP_USERNAME',
-    'BELGA_FTP_PASSWORD',
-    'BELGA_FTP_HOST',
-  ];
-
-  requiredEnvironmentVariables.forEach((key) => {
-    if (!process.env[key]) {
-      console.log('---------------------------------------------------------------');
-      console.log(`[ERROR]:Environment variable ${key} must be configured`);
-      console.log('---------------------------------------------------------------');
-      process.exit(1);
-    }
-  });
 
   const publicationTasks = await getNotStartedPublicationTasks();
 
@@ -34,7 +34,6 @@ app.post('/delta', async function (req, res, next) {
     console.log(`No publication tasks found to be processed.`);
     return res.status(200).end();
   }
-
 });
 
 app.use(errorHandler);
