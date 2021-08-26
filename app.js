@@ -10,14 +10,14 @@ app.post('/delta', async function (req, res, next) {
     'BELGA_FTP_HOST',
   ];
 
-/*  requiredEnvironmentVariables.forEach((key) => {
+  requiredEnvironmentVariables.forEach((key) => {
     if (!process.env[key]) {
       console.log('---------------------------------------------------------------');
       console.log(`[ERROR]:Environment variable ${key} must be configured`);
       console.log('---------------------------------------------------------------');
       process.exit(1);
     }
-  });*/
+  });
 
   const publicationTasks = await getNotStartedPublicationTasks();
 
