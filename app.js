@@ -1,10 +1,23 @@
 import { app, errorHandler } from 'mu';
 import { getNotStartedPublicationTasks, TASK_ONGOING_STATUS } from './lib/publication-task';
 
-// todo configure delta notifier to send deltas for publication tasks having adms:status not started
-
 app.post('/delta', async function (req, res, next) {
   console.log("Processing deltas for Belga...");
+
+  const requiredEnvironmentVariables = [
+    'BELGA_FTP_USERNAME',
+    'BELGA_FTP_PASSWORD',
+    'BELGA_FTP_HOST',
+  ];
+
+/*  requiredEnvironmentVariables.forEach((key) => {
+    if (!process.env[key]) {
+      console.log('---------------------------------------------------------------');
+      console.log(`[ERROR]:Environment variable ${key} must be configured`);
+      console.log('---------------------------------------------------------------');
+      process.exit(1);
+    }
+  });*/
 
   const publicationTasks = await getNotStartedPublicationTasks();
 
@@ -12,9 +25,11 @@ app.post('/delta', async function (req, res, next) {
     console.log(`Found ${publicationTasks.length} publication tasks to be processed.`);
     for (const publicationTask of publicationTasks) {
       await publicationTask.persistStatus(TASK_ONGOING_STATUS);
-      publicationTask.process(); // asynchronous: we're not waiting for the result
     };
-    return res.status(202).end();
+    res.sendStatus(202);
+    for (const publicationTask of publicationTasks) {
+      await publicationTask.process();
+    };
   } else {
     console.log(`No publication tasks found to be processed.`);
     return res.status(200).end();
