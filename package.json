@@ -13,9 +13,9 @@
   "license": "MIT",
   "dependencies": {
     "@lblod/mu-auth-sudo": "^0.2.0",
-    "xml": "^1.0.1",
+    "ftp": "^0.3.10",
     "moment": "^2.23.0",
-    "moment-timezone": "^0.5.27",
-    "ftp": "^0.3.10"
+    "moment-timezone": "^0.5.33",
+    "xml": "^1.0.1"
   }
 }
