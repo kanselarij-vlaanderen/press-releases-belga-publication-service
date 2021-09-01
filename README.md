@@ -11,7 +11,7 @@ Add the service to your `docker-compose.yml`:
 
 ```yaml
 services:
-  press-releases-belga-publication:
+  belga-publication:
     image: kanselarij/press-releases-belga-publication-service:0.1.1
     volumes:
       - ./data/belga:/share
@@ -35,7 +35,7 @@ Next, make the service listen for new conversion tasks. Assuming a delta-notifie
         },
     },
     callback: {
-        url: 'http://press-releases-belga-publication/delta',
+        url: 'http://belga-publication/delta',
         method: 'POST'
     },
     options: {
