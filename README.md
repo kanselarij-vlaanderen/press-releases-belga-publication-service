@@ -12,7 +12,7 @@ Add the service to your `docker-compose.yml`:
 ```yaml
 services:
   belga-publication:
-    image: kanselarij/press-releases-belga-publication-service:0.1.1
+    image: kanselarij/press-releases-belga-publication-service:0.1.2
     volumes:
       - ./data/belga:/share
     restart: always
